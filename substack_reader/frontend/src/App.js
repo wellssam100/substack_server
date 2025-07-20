@@ -24,6 +24,25 @@ function App() {
     console.log(`Clicked: ${sub.title}`);
     // You could also fetch that feed's posts here
   };
+  const handleSubRemove = async (urlToRemove) => {
+        try {
+            const res = await fetch('/subscriptions', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url: urlToRemove }),
+            });
+        if (res.ok) {
+            // Update the frontend list without refetching
+            setSubscriptions(prev =>
+                prev.filter(sub => (typeof sub === 'string' ? sub !== urlToRemove : sub.link !== urlToRemove))
+            );
+        } else {
+            console.error('Failed to remove subscription');
+        }
+        } catch (err) {
+            console.error('Error during remove:', err);
+        }
+    };
   
   return (
     <div className="App">
@@ -33,6 +52,7 @@ function App() {
           onSelect={handleSubSelect}
           sidebarVisible={sidebarVisible}
           setSidebarVisible={setSidebarVisible}
+          onRemove={handleSubRemove}
         />
       </aside>
       <main className="content">

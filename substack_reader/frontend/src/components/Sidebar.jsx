@@ -1,7 +1,9 @@
-function Sidebar({subscriptions, onSelect, sidebarVisible, setSidebarVisible}){
+import SubscriptionForm from './SubscriptionForm';
+function Sidebar({subscriptions, onSelect, sidebarVisible, setSidebarVisible, onRemove}){
     const handleCircleClick = () => {
         console.log("Top button clicked");
     };
+    
     
     return(
         <div className={`sidebar-wrapper ${sidebarVisible ? 'visible' : 'hidden'}`}>
@@ -21,13 +23,19 @@ function Sidebar({subscriptions, onSelect, sidebarVisible, setSidebarVisible}){
                             <img src='/icon.png' alt="Icon" className="circle-button-icon"/>
                         </button>
                     </div>
-                <h2>Subscriptions</h2>
-                {subscriptions.map((sub, i) => (
-                    <button className="subscription-button" key={i} onClick={() => onSelect(sub)}>
-                    {sub.title}
-                    </button>
-                ))}
-                <div className="sidebar-fade" />
+                    <h2>Subscriptions</h2>
+                    {subscriptions.map((sub) => (
+                        <div key={typeof sub === 'string' ? sub : sub.link}>
+                            <button className="subscription-button" key={sub} onClick={() => onSelect(sub)}>
+                                {sub.title}
+                            </button>
+                            <button className="subscription-remove-button" key={sub} onClick={() => onRemove(sub.link)}>
+                                X
+                            </button>
+                        </div>
+                    ))}
+                    <SubscriptionForm />
+                    <div className="sidebar-fade" />
                 </div>
             </aside>
         </div>

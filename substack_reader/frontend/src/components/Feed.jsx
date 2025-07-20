@@ -17,18 +17,22 @@ function Feed() {
     const handleRemove = async (urlToRemove) => {
         try {
             const res = await fetch('/subscriptions', {
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ url: urlToRemove }),
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url: urlToRemove }),
             });
-        if (res.ok) {
-            // Update the frontend list without refetching
+
+            if (res.ok) {
             setSubscriptions(prev =>
-                prev.filter(sub => (typeof sub === 'string' ? sub !== urlToRemove : sub.link !== urlToRemove))
+                prev.filter(sub =>
+                typeof sub === 'string'
+                    ? sub !== urlToRemove
+                    : sub.link !== urlToRemove
+                )
             );
-        } else {
+            } else {
             console.error('Failed to remove subscription');
-        }
+            }
         } catch (err) {
             console.error('Error during remove:', err);
         }
@@ -53,15 +57,15 @@ function Feed() {
       <h2>Subscriptions</h2>
       {Array.isArray(subscriptions) && subscriptions.length > 0 ? (
       <ul>
-          {subscriptions.map((sub, i) => {
+          {subscriptions.map((sub) => {
           const isString = typeof sub === 'string';
           const link = isString ? sub : sub?.link ?? null;
           const title = isString ? sub : sub?.title ?? link ?? 'Untitled';
           const isValidLink = typeof link === 'string' && link.startsWith('http');
          if (!link || typeof link !== 'string') {
-              console.warn(`Skipping subscription [${i}] — invalid link:`, link, 'Full entry:', sub);
+              console.warn(`Skipping subscription [${sub}] — invalid link:`, link, 'Full entry:', sub);
               return (
-                  <li key={`invalid-${i}`}>
+                  <li key={`invalid-${sub}`}>
                   <span>{title} (invalid or missing link)</span>
                   </li>
               );
@@ -75,8 +79,8 @@ function Feed() {
                     <button onClick={() => handleRemove(link)}>Remove</button>
                     {entries[link] && (
                     <ul>
-                        {entries[link].map((entry, j) => (
-                        <li key={j}>
+                        {entries[link].map((entry) => (
+                        <li key={entry}>
                             <a href={entry.link} target="_blank" rel="noopener noreferrer">
                             {entry.title}
                             </a>{' '}
