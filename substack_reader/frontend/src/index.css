@@ -1,3 +1,17 @@
+:root{
+  --bg-color: #1e2c22;
+  /*--menu-color: #07240f;*/
+  --menu-color: #1b0d00;
+  --menu-transparent: #1b0d0017;
+  --button-color: #113b1d;
+  --text-color: rgb(212, 193, 153);
+  --accent-color: rgb(206, 154, 41);
+}
+
+.layout{
+  position: relative;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,9 +19,168 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bg-color);
+
+}
+
+/* Header Colorrs*/
+h1,h2,h3 {
+  color: var(--accent-color);
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Layout container */
+.app-container {
+  display: flex;
+  height: 100vh;
+  font-family: sans-serif;
+}
+
+.sidebar {
+  width: 240px;
+  background-color: var(--menu-color);
+  color: white;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.2);
+  padding: 1rem;
+  padding-top: 0;
+  position: absolute;
+  overflow: visible;
+}
+
+.sidebar-fade {
+  height: 3rem;
+  width: 100%;
+  left: 0;
+  background: linear-gradient(to bottom, var(--menu-color), var(--menu-color) 50%, var(--menu-color) 25%,  transparent);
+  pointer-events: none;
+  position: absolute;
+  overflow: visible;
+  
+}
+
+.sidebar h2 {
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+/* Subscription buttons */
+.sidebar .subscription-button {
+  display: block;
+  width: 100%;
+  margin: 0 auto;        /* ⬅ centers it */
+  margin-bottom: 0.5rem;
+  background-color: var(--button-color);
+  color: var(--text-color);
+  border: none;
+  padding: 0.6rem;
+  border-radius: 5px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  align-items: center;
+}
+
+.sidebar .subscription-button:hover {
+  background-color: #444;
+}
+
+.sidebar-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 240px;
+  display: flex;
+  transition: transform 0.3s ease;
+  z-index: 10;
+}
+
+.sidebar-wrapper.hidden {
+  transform: translateX(-230px); /* leaves toggle button visible */
+}
+
+.sidebar-wrapper.visible {
+  transform: translateX(0);
+}
+
+.sidebar-toggle-wrapper{
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0;
+  padding-top: 0;
+  margin-right: -0.5rem; 
+}
+
+.sidebar-toggle {
+  margin: 0;
+  height: 3.5rem;
+  width: 2.5rem;
+  border: none;
+  background: var(--button-color);
+  color: var(--text-color);
+  cursor: pointer;
+  font-size: 1rem;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.sidebar-toggle:hover {
+  background-color: #634a10;
+}
+
+
+.sidebar-top-button {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 1rem;
+}
+
+.circle-button-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.circle-button {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #0F1A25; /* test color to confirm visibility */
+  color: white;
+  border: none;
+  padding: 0;
+  margin: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 1.5rem;
+  cursor: pointer;
+  text-align: center;
+  overflow: hidden;
+}
+
+.circle-button-icon {
+  width: 100%;    /* scale image to fit */
+  height: 100%;
+  object-fit: contain;
+  transition: filter 0.2s ease;
+}
+
+.circle-button:hover {
+  filter: invert(80%);
+}
+
+/* Main content */
+.content {
+  flex-grow: 1;
+  padding: 2rem;
+  color: rgb(49, 119, 49);
+
+}
+
