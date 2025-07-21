@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify, send_from_directory
+from datetime import datetime, timezone
 import feedparser
 import json
 import os
@@ -103,6 +104,51 @@ def get_feed_entries():
         }
         for entry in parsed.entries[:5]  # latest 5 posts
     ]
+    return jsonify(entries)
+
+@app.route("/entries/today", methods=["GET"])
+def entries_today():
+    feeds = load_subscriptions()
+    all_entries = []
+
+    now = datetime.now(timezone.utc).date()
+
+    for feed_url in feeds:
+        parsed = feedparser.parse(feed_url if isinstance(feed_url, str) else feed_url.get("link"))
+        for entry in parsed.entries:
+            published = entry.get("published_parsed")
+            if not published:
+                continue
+
+            published_date = datetime(*published[:6], tzinfo=timezone.utc).date()
+            if published_date == now:
+                all_entries.append({
+                    "title": entry.get("title"),
+                    "link": entry.get("link"),
+                    "published": entry.get("published"),
+                    "source": parsed.feed.get("title", feed_url)
+                })
+
+    return jsonify(all_entries)
+
+@app.route("/entries/single", methods=["POST"])
+def entries_for_feed():
+    data = request.json
+    url = data.get("url", "").strip()
+
+    if not url:
+        return jsonify({"error": "Missing URL"}), 400
+
+    parsed = feedparser.parse(url)
+    entries = []
+    for entry in parsed.entries[:10]:
+        entries.append({
+            "title": entry.get("title"),
+            "link": entry.get("link"),
+            "published": entry.get("published"),
+            "source": parsed.feed.get("title", url)
+        })
+
     return jsonify(entries)
 
 @app.route('/favicon.ico')

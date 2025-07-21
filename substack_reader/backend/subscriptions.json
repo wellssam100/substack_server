@@ -6,5 +6,9 @@
   {
     "title": "NPR Topics: News",
     "link": "https://feeds.npr.org/1001/rss.xml"
+  },
+  {
+    "title": "DYNOMIGHT",
+    "link": "https://dynomight.net/feed.xml"
   }
 ]
